@@ -11,5 +11,6 @@ namespace Market.Repositories.Interfaces
     public interface ICommentsRepository
     {
         public Task AddAsync(AddCommentRequest request, UserInfo userInfo);
+        Task RemoveComment(int id);
     }
 }

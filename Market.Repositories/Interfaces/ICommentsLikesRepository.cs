@@ -10,5 +10,6 @@ namespace Market.Repositories.Interfaces
     public interface ICommentsLikesRepository
     {
         public Task LikeComment(long commentId, UserInfo user);
+        
     }
 }

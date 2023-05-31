@@ -22,10 +22,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
 
         private string TableName = TableCreater.TableName;
         private NpgsqlConnection _connection;
-
-        public Repository(NpgsqlConnection connection) : base(connection)
+        private ITypeСharacteristicsRepository _typeCharacteristicsRepository;
+        private IСharacteristicsRepository _сharacteristicsRepository;
+        public Repository(NpgsqlConnection connection, ITypeСharacteristicsRepository typeCharacteristicsRepository, IСharacteristicsRepository сharacteristicsRepository) : base(connection)
         {
             _connection = connection;
+            _typeCharacteristicsRepository = typeCharacteristicsRepository;
+            _сharacteristicsRepository = сharacteristicsRepository;
         }
 
         public async Task<ProductDto> GetProductById(long id)
@@ -66,6 +69,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
                     .DistinctBy(p => p.Сharacteristicname)
                     .Select(k => new Charastitic()
                     {
+                        CharastiticId = k.characteristicid,
                         Name = k.Сharacteristicname,
                         Text = k.Сharacteristic
                     }).ToList()
@@ -85,6 +89,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
             // product.Comments = product.Comments.DistinctBy(p => p.CommentId).ToList();
             return product;
         }
+
+
 
         public async Task<int> AddAsync(ProductDto product)
         {
@@ -134,25 +140,18 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
         public async Task AddCharectiristic(ProductCharacteristicType characteristic)
         {
 
-
-            string insetTypeChararistic = $"INSERT INTO typeСharacteristics (typeСharacteristicsName,ProductId) VALUES(@Name,@ProductId) returning id";
-            string insetChararistic = $" INSERT INTO Сharacteristics (Сharacteristicname,TypeСharacteristicsId,Сharacteristic) VALUES(@Сharacteristic,@TypeId,@Text)";
-
-            //// получение айдишника нового типа хараектристики
-            long id = (await _connection.QueryAsync<long>(insetTypeChararistic, new
-            {
-                characteristic.Name,
-                characteristic.ProductId,
-            })).FirstOrDefault();
+            int id = await _typeCharacteristicsRepository.Add(characteristic.Name, characteristic.ProductId);
 
             foreach (var t in characteristic.Charastitics)
             {
-                await _connection.QueryAsync(insetChararistic, new
-                {
-                    Сharacteristic = t.Name,
-                    TypeId = id,
-                    t.Text
-                });
+                await _сharacteristicsRepository.Add(t.Name, id, t.Text);
+
+                //await _connection.QueryAsync(insetChararistic, new
+                //{
+                //    Сharacteristic = t.Name,
+                //    TypeId = id,
+                //    t.Text
+                //});
             }
         }
 

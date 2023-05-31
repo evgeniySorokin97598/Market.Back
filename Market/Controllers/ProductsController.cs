@@ -54,6 +54,8 @@ namespace Market.Controllers
             }
         }
 
+
+
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct([FromBody] ProductDto product)
         {
@@ -83,6 +85,21 @@ namespace Market.Controllers
             }
         }
 
-       
+        [HttpPost("AddCharectiristics")]
+        public async Task<IActionResult> AddCharectiristics([FromBody] ProductCharacteristicType request)
+        {
+
+            try
+            {
+                await _repository.AddCharectiristic(request);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+
     }
 }

@@ -11,5 +11,9 @@ namespace Market.Entities.Dto
         public long ProductId { get; set; }
         public string Name { get; set; }
         public List<Charastitic> Charastitics { get; set; } = new List<Charastitic>();
+        /// <summary>
+        /// ид характеристик которые нужно удалить
+        /// </summary>
+        public List<int> RemoveId { get; set; }
     }
 }

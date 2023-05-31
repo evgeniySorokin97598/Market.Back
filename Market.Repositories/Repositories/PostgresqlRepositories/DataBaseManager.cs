@@ -23,6 +23,10 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public ICommentsLikesRepository CommentsLikesRepository { get; private set; }
 
+        public ITypeСharacteristicsRepository TypeСharacteristicsRepository { get; private set; }
+
+        public IСharacteristicsRepository СharacteristicsRepository { get; private set; }
+
         private LoggerLib.Interfaces.ILogger _logger;
         public DataBaseManager(Configs config, LoggerLib.Interfaces.ILogger logger)
         {
@@ -32,10 +36,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market2; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             CategoriesRepository = new CategoriesRepository.Repository(connection);
             SubcategoryRepository = new SubcategoryRepository.Repository(connection);
-            ProductsRepository = new ProductsRepository.Repository(connection);
+            СharacteristicsRepository = new СharacteristicsRepository.Repository(connection);
+            TypeСharacteristicsRepository = new TypeСharacteristicsRepository.Repository(connection);
+            ProductsRepository = new ProductsRepository.Repository(connection, TypeСharacteristicsRepository, СharacteristicsRepository);
             UsersRepository = new UsersRepository.Repository(connection);
             CommentsRepository = new CommentsRepository.Repository(connection, UsersRepository);
             CommentsLikesRepository = new CommentsLikesRepository.Repository(connection, UsersRepository);
+
         }
 
         public async Task AddTestData()

@@ -8,6 +8,7 @@ namespace Market.Entities.Dto
 {
     public class Charastitic
     {
+        public int CharastiticId { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
     }

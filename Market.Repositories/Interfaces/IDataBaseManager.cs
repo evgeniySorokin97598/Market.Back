@@ -13,5 +13,7 @@ namespace Market.Repositories.Interfaces
         public IProductsRepository ProductsRepository { get; }
         public ICommentsRepository CommentsRepository { get; }
         public ICommentsLikesRepository  CommentsLikesRepository { get; }
+        public ITypeСharacteristicsRepository TypeСharacteristicsRepository { get; }
+        public IСharacteristicsRepository СharacteristicsRepository { get; }
     }
 }

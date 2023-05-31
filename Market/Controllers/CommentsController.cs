@@ -52,6 +52,20 @@ namespace Market.Controllers
             }
         }
 
+        [HttpDelete("Remove")]
+        public async Task<IActionResult> Remove([FromQuery] int id)
+        {
+            try
+            {
+                await _repository.RemoveComment(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
 
         [NonAction]
         private UserInfo GetUserInfo()
@@ -63,5 +77,8 @@ namespace Market.Controllers
             };
 
         }
+
+
+
     }
 }
