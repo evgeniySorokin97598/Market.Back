@@ -33,7 +33,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             _logger = logger;
 
             //var connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
-            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market2; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = {config.DataBaseConfig.DataBase}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             CategoriesRepository = new CategoriesRepository.Repository(connection);
             SubcategoryRepository = new SubcategoryRepository.Repository(connection);
             СharacteristicsRepository = new СharacteristicsRepository.Repository(connection);

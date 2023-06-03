@@ -28,6 +28,8 @@ namespace Market
             Environment.SetEnvironmentVariable("Password", "123qwe45asd");
             Environment.SetEnvironmentVariable("Port", "5432");
             Environment.SetEnvironmentVariable("Username", "postgres");
+            Environment.SetEnvironmentVariable("identety_url", "http://localhost:5234");
+
 #endif
 
 
@@ -40,8 +42,13 @@ namespace Market
                     Password = Environment.GetEnvironmentVariable("Password"),
                     Port = Environment.GetEnvironmentVariable("Port"),
                     Username = Environment.GetEnvironmentVariable("Username"),
-                }
+                    DataBase = Environment.GetEnvironmentVariable("Database"),
+                },
+                IdentetyServiceUrl = Environment.GetEnvironmentVariable("identety_url")
+
             };
+            if (string.IsNullOrEmpty(configs.DataBaseConfig.DataBase)) configs.DataBaseConfig.DataBase = "Market3";
+
             LoggerLib.Interfaces.ILogger logger = new ConsoleLogger();
 
             builder.Services.AddSingleton(logger);
@@ -50,7 +57,7 @@ namespace Market
             #region Создание и заполнение БД
             DataBaseCreater creater = new DataBaseCreater(configs, logger);
             creater.Create();
-            
+
 
 
             DataBaseManager manager = new DataBaseManager(configs, logger);
@@ -66,7 +73,7 @@ namespace Market
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
-        options.Authority = "http://localhost:5234";
+        options.Authority = configs.IdentetyServiceUrl;
     });
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -84,7 +91,7 @@ namespace Market
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
             app.UseCors("MyPolicy");
             app.UseCors(x => x
                   .AllowAnyMethod()

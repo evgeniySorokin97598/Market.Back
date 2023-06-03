@@ -9,5 +9,6 @@ namespace Market.Entities.Configs
     public class Configs
     {
         public DataBaseConfig DataBaseConfig { get; set; }    
+        public string IdentetyServiceUrl { get; set; }
     }
 }

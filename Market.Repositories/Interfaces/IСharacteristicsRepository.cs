@@ -8,6 +8,7 @@ namespace Market.Repositories.Interfaces
 {
     public interface IСharacteristicsRepository
     {
-        Task<int> Add(string name, int type, string characteristic);
+        Task<int> Add(string name, int type, string characteristic, int id);
+        Task Remove(int id);
     }
 }

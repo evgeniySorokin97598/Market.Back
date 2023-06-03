@@ -8,7 +8,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.Сharacteristi
 {
     internal class Columns
     {
-        public static string Id = "СharacteristicId";
+        public static string Id = "characteristicid";
         public static string СharacteristicName = "СharacteristicName";
         public static string Сharacteristic = "Сharacteristic";
         public static string TypeСharacteristicsId = "TypeСharacteristicsId";

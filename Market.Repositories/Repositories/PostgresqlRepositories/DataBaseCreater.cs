@@ -30,6 +30,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             _commandsCreate = new List<string>();
             Console.WriteLine($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+            _databaseName = config.DataBaseConfig.DataBase;
 
             Connection.Open();
             CreateDataBase().GetAwaiter().GetResult();
@@ -37,7 +38,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             Connection.Dispose();
 
             //Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
-            Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = {_databaseName}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+            Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = {config.DataBaseConfig.DataBase}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
 
 
 

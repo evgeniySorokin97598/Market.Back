@@ -24,11 +24,17 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.Сharacteristi
 
         }
 
-        public async Task<int> Add(string name, int type, string characteristic)
+        public async Task Remove(int id)
+        {
+            string sql = $"DELETE FROM {TableName} WHERE {Id} = @id";
+            await _connection.QueryAsync(sql, new { id = id });
+        }
+
+        public async Task<int> Add(string name, int type, string characteristic,int id)
         {
 
-            int id = await Get(name, characteristic, type);
-            if (id == 0)
+            int count = await Get(id);
+            if (count == 0)
             {
                 string insetChararistic = $" INSERT INTO {TableName} ({СharacteristicName},{TypeСharacteristicsId},{Сharacteristic}) VALUES(@Сharacteristic,@TypeId,@Text) returning {Id}";
                 return (await _connection.QueryAsync<int>(insetChararistic, new
@@ -44,14 +50,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.Сharacteristi
                 return id;
             }
         }
-        public async Task<int> Get(string name, string text, int type)
+        public async Task<int> Get(int id)
         {
-            string sql = $"SELECT {Id} from {TableName} WHERE {СharacteristicName} = @Сharacteristic AND {Сharacteristic} = @Text AND {TypeСharacteristicsId} = @type";
+            string sql = $"SELECT count(*) from {TableName} WHERE {Id} = @id   ";
             return (await _connection.QueryAsync<int>(sql, new
             {
-                Сharacteristic = name,
-                Text = text,
-                type = type
+                id = id
             })).FirstOrDefault();
         }
         public async Task Update(int id, string name, string text)

@@ -47,10 +47,11 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
             {
                 id
             });
-            var cooments = list.DistinctBy(p => p.likeid).Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity) || !string.IsNullOrEmpty(p.flaws));
+            var cooments = list.Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity) || !string.IsNullOrEmpty(p.flaws));
 
             var first = list.FirstOrDefault();
             if (first == null) return null;
+            
             ProductDto product = new ProductDto()
             {
                 Id = first.id,
@@ -82,7 +83,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
                     Flaws = p.flaws,
                     UserName = string.IsNullOrEmpty(p.nickname) ? "Пользователь" : p.nickname,
                     Stars = p.stars,
-                    CountLikes = cooments.Where(t => t.commentid == p.commentid).Count()
+                    CountLikes = cooments.Where(t => t.commentid == p.commentid).DistinctBy(p => p.likeid).Count()
                 }).ToList()
             };
 
@@ -139,20 +140,29 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
 
         public async Task AddCharectiristic(ProductCharacteristicType characteristic)
         {
-
+            if (characteristic == null) {
+                return;
+            }
             int id = await _typeCharacteristicsRepository.Add(characteristic.Name, characteristic.ProductId);
 
-            foreach (var t in characteristic.Charastitics)
-            {
-                await _сharacteristicsRepository.Add(t.Name, id, t.Text);
+            if (characteristic.Charastitics != null) {
+                foreach (var t in characteristic.Charastitics)
+                {
+                    if (!string.IsNullOrEmpty(t.Name) && !string.IsNullOrEmpty(t.Text))
+                    {
+                        await _сharacteristicsRepository.Add(t.Name, id, t.Text, t.CharastiticId);
+                    }
 
-                //await _connection.QueryAsync(insetChararistic, new
-                //{
-                //    Сharacteristic = t.Name,
-                //    TypeId = id,
-                //    t.Text
-                //});
+                }
             }
+            
+            if (characteristic.RemoveId != null) {
+                foreach (var t in characteristic.RemoveId)
+                {
+                    await _сharacteristicsRepository.Remove(t);
+                }
+            }
+            
         }
 
         public async Task<IEnumerable<ProductDto>> GetProducts(GetProductsRequest request)
