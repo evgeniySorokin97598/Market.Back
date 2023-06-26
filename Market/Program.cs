@@ -24,12 +24,11 @@ namespace Market
 
             //Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
 #if DEBUG
-            Environment.SetEnvironmentVariable("Host", "192.168.133.128");
-            Environment.SetEnvironmentVariable("Password", "123qwe45asd");
+            Environment.SetEnvironmentVariable("Host", "192.168.73.128");
+            Environment.SetEnvironmentVariable("Password", "1");
             Environment.SetEnvironmentVariable("Port", "5432");
             Environment.SetEnvironmentVariable("Username", "postgres");
             Environment.SetEnvironmentVariable("identety_url", "http://localhost:5234");
-
 #endif
 
 

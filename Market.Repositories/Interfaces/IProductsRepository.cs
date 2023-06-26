@@ -1,4 +1,5 @@
-﻿using Market.Entities.Dto;
+﻿using Market.Entities;
+using Market.Entities.Dto;
 using Market.Entities.Requests;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Market.Repositories.Interfaces
         /// </summary>
         /// <param name="categyName"></param>
         /// <returns></returns>
-        public Task<IEnumerable<ProductDto>> GetProductsByCategory(string categyName);
+        public Task<IEnumerable<ProductDto>> GetProductsByCategory(string categyName, OrderBy order);
         /// <summary>
         /// добавление нового товара
         /// </summary>

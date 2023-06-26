@@ -13,6 +13,10 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository.Columns;
 using Market.Repositories.Repositories.PostgresqlRepositories;
+using Market.Entities;
+using System.Diagnostics;
+using System.Data.SqlTypes;
+using System.ComponentModel.Design;
 
 namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository
 {
@@ -83,7 +87,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
                     Flaws = p.flaws,
                     UserName = string.IsNullOrEmpty(p.nickname) ? "Пользователь" : p.nickname,
                     Stars = p.stars,
-                    CountLikes = cooments.Where(t => t.commentid == p.commentid).DistinctBy(p => p.likeid).Count()
+                    CountLikes = p.likeid != null ? cooments.Where(t => t.commentid == p.commentid).DistinctBy(p => p.likeid).Count() : 0
                 }).ToList()
             };
 
@@ -116,7 +120,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
             return id;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProductsByCategory(string categyName)
+        public async Task<IEnumerable<ProductDto>> GetProductsByCategory(string categyName,OrderBy order)
         {
             string sql = $"SELECT  " +
                 $"{TableName}.{nameof(ProductDto.Name)}," +
@@ -124,10 +128,26 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
                 $"{TableName}.{nameof(ProductDto.Quantity)}," +
                 $"{TableName}.{nameof(ProductDto.Brend)}," +
                 $"{TableName}.{nameof(ProductDto.Price)}, " +
-                $"{TableName}.{nameof(ProductDto.Id)} " +
+                $"{TableName}.{nameof(ProductDto.Id)}, " +
+                $"{TableName}.{Image} " +
                 $" From {TableName} " +
                 $" Join {SubcategoryRepository.TableCreater.TableName} ON {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.IdColumnName} =  {TableName}.{SubCategoryIdColumn}" +
-                $" WHERE {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.NameColumnName} = @Category";
+                $" WHERE {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.NameColumnName} = @Category " +
+                "  {0} ";
+
+            switch (order) {
+                case OrderBy.Price:
+                    sql = string.Format(sql, $"ORDER BY {Price}" );
+
+                    break;
+                case OrderBy.DescPrice:
+                    sql = string.Format(sql, $"ORDER BY {Price} DESC");
+                    break;
+                case OrderBy.None:
+                    sql = string.Format(sql, string.Empty);
+                    break;
+            }
+
 
             var result = await _connection.QueryAsync<ProductDto>(sql, new
             {

@@ -35,7 +35,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.TypeСharacter
             }
             else return id;
         }
-        public async Task<int> GetByName(string name, long productId) {
+        public async Task<int> GetByName(string name, long productId) 
+        {
             string sql = $"SELECT {Id} from {TableName} WHERE {TypeСharacteristicsName} = @Name AND {ProductId} = @ProductId ";
             return (await _connection.QueryAsync<int>(sql, new
             {

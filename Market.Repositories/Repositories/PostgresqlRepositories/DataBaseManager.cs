@@ -32,7 +32,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         {
             _logger = logger;
 
-            //var connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+            
             var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = {config.DataBaseConfig.DataBase}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             CategoriesRepository = new CategoriesRepository.Repository(connection);
             SubcategoryRepository = new SubcategoryRepository.Repository(connection);
@@ -42,7 +42,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             UsersRepository = new UsersRepository.Repository(connection);
             CommentsRepository = new CommentsRepository.Repository(connection, UsersRepository);
             CommentsLikesRepository = new CommentsLikesRepository.Repository(connection, UsersRepository);
-
         }
 
         public async Task AddTestData()
@@ -63,11 +62,17 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             await CreateCategories(categories);
 
         }
+         
+
         private async Task CreateCategories(Dictionary<string, List<string>> categories)
         {
             foreach (var t in categories)
             {
-
+                List<string> urls = new List<string>();
+                urls.Add("https://cdn.citilink.ru/lmOlbDE8Y765hxGtJl23QbDhVuuiGBJBrT81ib8D45k/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1859665_v01_b.jpg");
+                urls.Add("https://cdn.citilink.ru/o61XYzzwAA5xnk75ip6NaUOetsdbJ_bHI7LAbV7wiwQ/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1856653_v01_b.jpg");
+                urls.Add("https://cdn.citilink.ru/YFnwtlCFnjO6jp8M572GgZNTQ2H6CfLVagWXPLmGD3s/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1863687_v01_b.jpg");
+                urls.Add("https://cdn.citilink.ru/y3kQwyUmX1pIZoASUgt_rKhJxrcUxUCz-vfXWYTknaY/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1549847_v01_b.jpg");
                 var CategoryId = await CategoriesRepository.AddCategoryAsync(new Market.Entities.Dto.CategoryDto()
                 {
                     CategoryName = t.Key,
@@ -82,7 +87,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         SubCategoryName = subcategory,
                         SubCategoryUrlIcon = "https://imdiz.ru/files/store/img/icons_catalog/desktops.png"
                     });
-
+                    Random random = new Random();
                     for (int i = 0; i < 40; i++)
                     {
 
@@ -91,7 +96,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                             Brend = $"Brend{i}",
                             SubCategoryid = SubcategoryId,
                             Description = $"Description{i}",
-                            Image = "https://cdn.citilink.ru/magjqha5wz4kARnf2OGpTvOoT6StVnkREEVlbQOxEHM/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1478082_v01_b.jpg",
+                            Image = urls[random.Next(0, urls.Count() - 1)],
                             Name = $"дорогой комп{i}",
                             Price = new Random().Next(100000, 200000),
                             Quantity = new Random().Next(1, 100),

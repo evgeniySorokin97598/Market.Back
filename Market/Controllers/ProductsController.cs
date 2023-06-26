@@ -1,4 +1,5 @@
-﻿using Market.Entities.Dto;
+﻿using Market.Entities;
+using Market.Entities.Dto;
 using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -39,12 +40,12 @@ namespace Market.Controllers
             }
         }
 
-        [HttpGet("GetProductsByCategory/{category}")]
-        public async Task<IActionResult> GetProductsByCategory(string category)
+        [HttpGet("GetProductsByCategory/{category}/{filter}")]
+        public async Task<IActionResult> GetProductsByCategory(string category, OrderBy filter = OrderBy.None)
         {
             try
             {
-                var result = await _repository.GetProductsByCategory(category);
+                var result = await _repository.GetProductsByCategory(category, filter);
                 return Ok(result);
             }
             catch (Exception ex)
