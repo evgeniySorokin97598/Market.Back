@@ -27,9 +27,10 @@ namespace Market
 #if DEBUG
             Environment.SetEnvironmentVariable("Host", "192.168.73.128");
             Environment.SetEnvironmentVariable("Password", "1");
-            Environment.SetEnvironmentVariable("Port", "5432");
+            Environment.SetEnvironmentVariable("Port", "5433");
             Environment.SetEnvironmentVariable("Username", "postgres");
             Environment.SetEnvironmentVariable("identety_url", "http://localhost:5234");
+            Environment.SetEnvironmentVariable("Database", "Market");
 #endif
 
 
@@ -53,19 +54,23 @@ namespace Market
             builder.Services.AddTransient<ITypeÑharacteristicsRepository, Market.Repositories.Repositories.PostgresqlRepositories.TypeÑharacteristicsRepository.Repository>();
             builder.Services.AddTransient<IUsersRepository, Market.Repositories.Repositories.PostgresqlRepositories.UsersRepository.Repository>();
             builder.Services.AddTransient<IÑharacteristicsRepository, Market.Repositories.Repositories.PostgresqlRepositories.ÑharacteristicsRepository.Repository>();
-
-
             builder.Services.AddSingleton<LoggerLib.Interfaces.ILogger>(new ConsoleLogger());
 
 
             #region Ñîçäàíèå è çàïîëíåíèå ÁÄ
-            //DataBaseCreater creater = new DataBaseCreater(configs, logger);
-            //creater.Create();
-
-
-
-            //DataBaseManager manager = new DataBaseManager(configs, logger);
-            //manager.AddTestData().GetAwaiter().GetResult();
+            var logger = new ConsoleLogger();
+            var configs = new DataBaseConfig()
+            {
+                Host = Environment.GetEnvironmentVariable("Host"),
+                Password = Environment.GetEnvironmentVariable("Password"),
+                Port = Environment.GetEnvironmentVariable("Port"),
+                Username = Environment.GetEnvironmentVariable("Username"),
+                DataBase = Environment.GetEnvironmentVariable("Database"),
+            };
+            DataBaseCreater creater = new DataBaseCreater(configs, logger);
+            creater.Create();
+            DataBaseManager manager = new DataBaseManager(new PostgresqlProvider(configs), logger);
+            manager.AddTestData().GetAwaiter().GetResult();
 
             #endregion
 

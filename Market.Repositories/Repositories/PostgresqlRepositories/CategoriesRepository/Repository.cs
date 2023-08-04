@@ -28,7 +28,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.CategoriesRepo
         public async Task<int> GetCount()
         {
             string sql = $"SELECT COUNT(*) from {_tableName} ";
-            return (await _connection.QueryAsync<int>(sql)).First();
+            var res = await _connection.QueryAsync<int>(sql);
+            return res.FirstOrDefault();
         }
 
         public async Task<long> AddCategoryAsync(CategoryDto category)

@@ -52,8 +52,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.CommentsReposi
                     stars = request.Stars,
                 });
             }
-
-
         }
 
         public async Task RemoveComment(int id)

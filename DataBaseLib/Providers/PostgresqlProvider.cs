@@ -12,27 +12,32 @@ namespace DataBaseLib.Providers
     public class PostgresqlProvider : IDbProvider
     {
         private DataBaseConfig _config;
-        public PostgresqlProvider(DataBaseConfig DataBaseConfig) {
+        public PostgresqlProvider(DataBaseConfig DataBaseConfig)
+        {
             _config = DataBaseConfig;
         }
-        public Task<IEnumerable<T>> QueryAsync<T>(string query, object obj = null)
-        {
-            using (var connection = new NpgsqlConnection(GetConnectionString())) {
-               return  connection.QueryAsync<T>(query, obj);
-            }
-        }
-
-        public Task<IEnumerable<dynamic>> QueryAsync(string query, object obj = null)
+        public async Task<IEnumerable<T>> QueryAsync<T>(string query, object obj = null)
         {
             using (var connection = new NpgsqlConnection(GetConnectionString()))
             {
-                return connection.QueryAsync(query, obj);
+                connection.Open();
+                return await connection.QueryAsync<T>(query, obj);
             }
         }
 
-        private string GetConnectionString() {
-           
-            return $"Host={_config.Host}:{_config.Port};Database = {_config.DataBase}; Username={_config.Username};Password={_config.Password}"; 
+        public async Task<IEnumerable<dynamic>> QueryAsync(string query, object obj = null)
+        {
+            using (var connection = new NpgsqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+                return await connection.QueryAsync(query, obj);
+            }
+        }
+
+        private string GetConnectionString()
+        {
+
+            return $"Host={_config.Host};Port ={_config.Port};Database = {_config.DataBase}; Username={_config.Username};Password={_config.Password}";
         }
     }
 }
