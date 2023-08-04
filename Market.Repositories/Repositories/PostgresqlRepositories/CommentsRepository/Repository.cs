@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataBaseLib.Interfaces;
 using Market.Entities.Dto;
 using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
@@ -20,7 +21,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.CommentsReposi
 
         private IUsersRepository _usersRepository;
         private string TableName = TableCreater.TableName;
-        public Repository(NpgsqlConnection connection, IUsersRepository usersRepository) : base(connection)
+        public Repository(IDbProvider connection, IUsersRepository usersRepository) : base(connection)
         {
 
             _usersRepository = usersRepository;

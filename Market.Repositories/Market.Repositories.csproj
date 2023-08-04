@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataBaseLib\DataBaseLib.csproj" />
     <ProjectReference Include="..\LoggerLib\LoggerLib.csproj" />
     <ProjectReference Include="..\Market.Entities\Market.Entities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Npgsql" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataBaseLib.Interfaces;
 using Market.Entities.Dto;
 using Market.Repositories.Interfaces;
 using Market.Repositories.Repositories.PostgresqlRepositories;
@@ -15,13 +16,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.UsersRepositor
 {
     public class Repository : BaseRepository, IUsersRepository
     {
-        private NpgsqlConnection _connection;
+         
 
         private string Table { get { return TableCreater.Table; } }
 
-        public Repository(NpgsqlConnection connection) : base(connection)
+        public Repository(IDbProvider connection) : base(connection)
         {
-            _connection = connection;
+             
         }
 
         public async Task<long> GetUser(UserInfo info)

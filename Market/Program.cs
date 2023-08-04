@@ -1,10 +1,11 @@
 
+using DataBaseLib;
+using DataBaseLib.Interfaces;
+using DataBaseLib.Providers;
 using IdentityServer4.AccessTokenValidation;
 using LoggerLib.Loggers;
-using Market.Entities.Configs;
 using Market.Repositories.Interfaces;
 using Market.Repositories.Repositories.PostgresqlRepositories;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 
 namespace Market
@@ -33,37 +34,42 @@ namespace Market
 
 
 
-            Configs configs = new Configs()
+            builder.Services.AddSingleton(new DataBaseConfig()
             {
-                DataBaseConfig = new DataBaseConfig()
-                {
-                    Host = Environment.GetEnvironmentVariable("Host"),
-                    Password = Environment.GetEnvironmentVariable("Password"),
-                    Port = Environment.GetEnvironmentVariable("Port"),
-                    Username = Environment.GetEnvironmentVariable("Username"),
-                    DataBase = Environment.GetEnvironmentVariable("Database"),
-                },
-                IdentetyServiceUrl = Environment.GetEnvironmentVariable("identety_url")
+                Host = Environment.GetEnvironmentVariable("Host"),
+                Password = Environment.GetEnvironmentVariable("Password"),
+                Port = Environment.GetEnvironmentVariable("Port"),
+                Username = Environment.GetEnvironmentVariable("Username"),
+                DataBase = Environment.GetEnvironmentVariable("Database"),
+            });
 
-            };
-            if (string.IsNullOrEmpty(configs.DataBaseConfig.DataBase)) configs.DataBaseConfig.DataBase = "Market3";
 
-            LoggerLib.Interfaces.ILogger logger = new ConsoleLogger();
+            builder.Services.AddTransient<IDbProvider, PostgresqlProvider>();
+            builder.Services.AddTransient<ICategoriesRepository, Market.Repositories.Repositories.PostgresqlRepositories.CategoriesRepository.Repository>();
+            builder.Services.AddTransient<ICommentsLikesRepository, Market.Repositories.Repositories.PostgresqlRepositories.CommentsLikesRepository.Repository>();
+            builder.Services.AddTransient<ICommentsRepository, Market.Repositories.Repositories.PostgresqlRepositories.CommentsRepository.Repository>();
+            builder.Services.AddTransient<IProductsRepository, Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository.Repository>();
+            builder.Services.AddTransient<ISubcategoryRepository, Market.Repositories.Repositories.PostgresqlRepositories.SubcategoryRepository.Repository>();
+            builder.Services.AddTransient<IType—haracteristicsRepository, Market.Repositories.Repositories.PostgresqlRepositories.Type—haracteristicsRepository.Repository>();
+            builder.Services.AddTransient<IUsersRepository, Market.Repositories.Repositories.PostgresqlRepositories.UsersRepository.Repository>();
+            builder.Services.AddTransient<I—haracteristicsRepository, Market.Repositories.Repositories.PostgresqlRepositories.—haracteristicsRepository.Repository>();
 
-            builder.Services.AddSingleton(logger);
+
+            builder.Services.AddSingleton<LoggerLib.Interfaces.ILogger>(new ConsoleLogger());
 
 
             #region —ÓÁ‰‡ÌËÂ Ë Á‡ÔÓÎÌÂÌËÂ ¡ƒ
-            DataBaseCreater creater = new DataBaseCreater(configs, logger);
-            creater.Create();
+            //DataBaseCreater creater = new DataBaseCreater(configs, logger);
+            //creater.Create();
 
 
 
-            DataBaseManager manager = new DataBaseManager(configs, logger);
-            manager.AddTestData().GetAwaiter().GetResult();
+            //DataBaseManager manager = new DataBaseManager(configs, logger);
+            //manager.AddTestData().GetAwaiter().GetResult();
 
             #endregion
-            builder.Services.AddSingleton(configs);
+
+
             builder.Services.AddTransient<IDataBaseManager, DataBaseManager>();
             IdentityModelEventSource.ShowPII = true;
 
@@ -72,7 +78,7 @@ namespace Market
     {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
-        options.Authority = configs.IdentetyServiceUrl;
+        options.Authority = Environment.GetEnvironmentVariable("identety_url");
     });
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -81,9 +87,6 @@ namespace Market
                        .AllowAnyHeader();
             }));
             var app = builder.Build();
-
-
-
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

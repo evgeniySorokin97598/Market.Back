@@ -1,12 +1,6 @@
-﻿using Market.Entities.Configs;
+﻿using DataBaseLib.Interfaces;
 using Market.Entities.Dto;
 using Market.Repositories.Interfaces;
-using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Market.Repositories.Repositories.PostgresqlRepositories
 {
@@ -28,12 +22,9 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public IСharacteristicsRepository СharacteristicsRepository { get; private set; }
 
         private LoggerLib.Interfaces.ILogger _logger;
-        public DataBaseManager(Configs config, LoggerLib.Interfaces.ILogger logger)
+        public DataBaseManager(IDbProvider connection, LoggerLib.Interfaces.ILogger logger)
         {
             _logger = logger;
-
-            
-            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = {config.DataBaseConfig.DataBase}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             CategoriesRepository = new CategoriesRepository.Repository(connection);
             SubcategoryRepository = new SubcategoryRepository.Repository(connection);
             СharacteristicsRepository = new СharacteristicsRepository.Repository(connection);
@@ -68,11 +59,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         {
             foreach (var t in categories)
             {
-                List<string> urls = new List<string>();
-                urls.Add("https://cdn.citilink.ru/lmOlbDE8Y765hxGtJl23QbDhVuuiGBJBrT81ib8D45k/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1859665_v01_b.jpg");
-                urls.Add("https://cdn.citilink.ru/o61XYzzwAA5xnk75ip6NaUOetsdbJ_bHI7LAbV7wiwQ/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1856653_v01_b.jpg");
-                urls.Add("https://cdn.citilink.ru/YFnwtlCFnjO6jp8M572GgZNTQ2H6CfLVagWXPLmGD3s/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1863687_v01_b.jpg");
-                urls.Add("https://cdn.citilink.ru/y3kQwyUmX1pIZoASUgt_rKhJxrcUxUCz-vfXWYTknaY/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1549847_v01_b.jpg");
+                List<string> urls = new List<string>
+                {
+                    "https://cdn.citilink.ru/lmOlbDE8Y765hxGtJl23QbDhVuuiGBJBrT81ib8D45k/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1859665_v01_b.jpg",
+                    "https://cdn.citilink.ru/o61XYzzwAA5xnk75ip6NaUOetsdbJ_bHI7LAbV7wiwQ/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1856653_v01_b.jpg",
+                    "https://cdn.citilink.ru/YFnwtlCFnjO6jp8M572GgZNTQ2H6CfLVagWXPLmGD3s/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1863687_v01_b.jpg",
+                    "https://cdn.citilink.ru/y3kQwyUmX1pIZoASUgt_rKhJxrcUxUCz-vfXWYTknaY/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1549847_v01_b.jpg"
+                };
                 var CategoryId = await CategoriesRepository.AddCategoryAsync(new Market.Entities.Dto.CategoryDto()
                 {
                     CategoryName = t.Key,

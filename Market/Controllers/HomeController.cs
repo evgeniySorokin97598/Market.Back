@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 public class HomeController : Controller
 {
     private LoggerLib.Interfaces.ILogger  _logger;
-    private IDataBaseManager _manager;
-    
-    public HomeController(LoggerLib.Interfaces.ILogger logger, IDataBaseManager manager)
+    ICategoriesRepository _repository;
+
+
+    public HomeController(LoggerLib.Interfaces.ILogger logger, ICategoriesRepository repository)
     {
         _logger = logger;
-        _manager = manager;
+        _repository = repository;
     }
 
 
@@ -21,7 +22,7 @@ public class HomeController : Controller
     {
         try
         {
-            var Caregories = await _manager.CategoriesRepository.GetCategoriesAsync();
+            var Caregories = await _repository.GetCategoriesAsync();
             return Ok(Caregories);
         }
         catch (Exception ex)

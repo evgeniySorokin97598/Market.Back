@@ -14,11 +14,11 @@ namespace Market.Controllers
         private readonly ICommentsRepository _repository;
         private readonly ICommentsLikesRepository _likeICommentsLikesRepository;
         private LoggerLib.Interfaces.ILogger _Logger;
-        public CommentsController(IDataBaseManager manager, LoggerLib.Interfaces.ILogger logger)
+        public CommentsController(ICommentsRepository commentsRepository, ICommentsLikesRepository likeICommentsLikesRepository, LoggerLib.Interfaces.ILogger logger)
         {
-            _repository = manager.CommentsRepository;
+            _repository = commentsRepository;
             _Logger = logger;
-            _likeICommentsLikesRepository = manager.CommentsLikesRepository;
+            _likeICommentsLikesRepository = likeICommentsLikesRepository;
         }
 
         [Authorize]

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataBaseLib.Interfaces;
 using Market.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.TypeСharacter
     public class Repository : BaseRepository, ITypeСharacteristicsRepository
     {
         public string TableName = TableCreater.TableName;
-        public Repository(IDbConnection connection) : base(connection)
+        public Repository(IDbProvider connection) : base(connection)
         {
 
 

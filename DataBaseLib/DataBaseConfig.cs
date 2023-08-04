@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market.Entities.Configs
+namespace DataBaseLib
 {
     public class DataBaseConfig
     {

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataBaseLib.Interfaces;
 using Market.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.Сharacteristi
     public class Repository : BaseRepository, IСharacteristicsRepository
     {
         public string TableName = TableCreater.TableName;
-        public Repository(IDbConnection connection) : base(connection)
+        public Repository(IDbProvider connection) : base(connection)
         {
-
-
-
         }
 
         public async Task Remove(int id)

@@ -9,13 +9,14 @@ using static Market.Repositories.Repositories.PostgresqlRepositories.CommentsLik
 using Dapper;
 using Market.Repositories.Interfaces;
 using Market.Entities.Dto;
+using DataBaseLib.Interfaces;
 
 namespace Market.Repositories.Repositories.PostgresqlRepositories.CommentsLikesRepository
 {
     public class Repository : BaseRepository, ICommentsLikesRepository
     {
         private IUsersRepository _usersRepository;
-        public Repository(NpgsqlConnection connection, IUsersRepository usersRepository) : base(connection)
+        public Repository(IDbProvider connection, IUsersRepository usersRepository) : base(connection)
         {
             _usersRepository = usersRepository;
         }

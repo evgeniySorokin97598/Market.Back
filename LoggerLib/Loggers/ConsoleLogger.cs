@@ -19,11 +19,7 @@ namespace LoggerLib.Loggers
             Console.WriteLine(message);
         }
 
-        public void Fatal(string message)
-        {
-            Console.WriteLine(message);
-        }
-
+        
         public void Info(string message)
         {
             Console.WriteLine(message);

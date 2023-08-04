@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataBaseLib.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 {
     public abstract class BaseRepository
     {
-        protected IDbConnection _connection;
-        public BaseRepository(IDbConnection connection)
+        protected IDbProvider _connection;
+        public BaseRepository(IDbProvider connection)
         {
             _connection = connection;
         }

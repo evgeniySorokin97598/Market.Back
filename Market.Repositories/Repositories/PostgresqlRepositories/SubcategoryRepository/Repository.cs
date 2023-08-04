@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataBaseLib.Interfaces;
 using Market.Entities.Dto;
 using Market.Repositories.Interfaces;
 using Npgsql;
@@ -17,7 +18,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.SubcategoryRep
         private string TableName = TableCreater.TableName;
 
         
-        public Repository(NpgsqlConnection connection):base(connection) 
+        public Repository(IDbProvider connection):base(connection) 
         {
              
         }

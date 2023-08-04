@@ -10,14 +10,14 @@ namespace Market.Controllers
     public class ProductsController : Controller
     {
         private LoggerLib.Interfaces.ILogger _logger;
-        private IDataBaseManager _manager;
+         
         private IProductsRepository _repository;
 
-        public ProductsController(LoggerLib.Interfaces.ILogger logger, IDataBaseManager manager)
+        public ProductsController(LoggerLib.Interfaces.ILogger logger, IProductsRepository repositoy)
         {
             _logger = logger;
-            _manager = manager;
-            _repository = manager.ProductsRepository;
+
+            _repository = repositoy;
         }
 
         [HttpPost("GetProducts")]

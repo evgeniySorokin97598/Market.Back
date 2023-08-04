@@ -10,9 +10,9 @@ namespace Market.Controllers
         
 
         private ICategoriesRepository _repository;
-        public CategoryController(IDataBaseManager manager)
+        public CategoryController(ICategoriesRepository repository)
         {
-            _repository = manager.CategoriesRepository;
+            _repository = repository;
 
         }
 

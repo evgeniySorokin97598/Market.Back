@@ -17,6 +17,7 @@ using Market.Entities;
 using System.Diagnostics;
 using System.Data.SqlTypes;
 using System.ComponentModel.Design;
+using DataBaseLib.Interfaces;
 
 namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository
 {
@@ -25,12 +26,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
     {
 
         private string TableName = TableCreater.TableName;
-        private NpgsqlConnection _connection;
+        
         private ITypeСharacteristicsRepository _typeCharacteristicsRepository;
         private IСharacteristicsRepository _сharacteristicsRepository;
-        public Repository(NpgsqlConnection connection, ITypeСharacteristicsRepository typeCharacteristicsRepository, IСharacteristicsRepository сharacteristicsRepository) : base(connection)
+        public Repository(IDbProvider connection, ITypeСharacteristicsRepository typeCharacteristicsRepository, IСharacteristicsRepository сharacteristicsRepository) : base(connection)
         {
-            _connection = connection;
+            
             _typeCharacteristicsRepository = typeCharacteristicsRepository;
             _сharacteristicsRepository = сharacteristicsRepository;
         }
@@ -91,7 +92,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsReposi
                 }).ToList()
             };
 
-            // product.Comments = product.Comments.DistinctBy(p => p.CommentId).ToList();
             return product;
         }
 
